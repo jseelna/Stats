@@ -5,6 +5,8 @@ import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,7 +19,7 @@ import java.util.*;
 public class CollectCardSets {
 	
 	static final String CARD_SERIES = "Topps";  
-	static final String CARD_YEAR = "1952";
+	static final String CARD_YEAR = "1957";
 	static final String BASE_PATH = "D:/images/bbcards/";
 	
 	static final String BASE_URL = "http://www.tradingcarddb.com";
@@ -30,13 +32,21 @@ public class CollectCardSets {
 //			String prevLastName = " ";
 //			String prevFirstName = " ";
 			
+			String dataFilePath = BASE_PATH + CARD_SERIES+ "/" + CARD_YEAR + CARD_SERIES + "Index.csv";
+			boolean appendToDataFile = true;
+			
+			FileWriter dataFile = new FileWriter(dataFilePath,appendToDataFile);
+			PrintWriter dataPrint = new PrintWriter(dataFile);
+			
+			
+			
 			File seriesDIR = new File(BASE_PATH + CARD_SERIES + "/" + CARD_YEAR + "/");
 			if (!seriesDIR.exists()){
 				seriesDIR.mkdirs();
-		}
+			}
 			
 			String cardYearPage = getCardYearURL(CARD_YEAR);
-			Document yearDoc = Jsoup.connect(cardYearPage).timeout(20000).get();
+			Document yearDoc = Jsoup.connect(cardYearPage).timeout(60000).get();
 			Elements cardsets = yearDoc.select("a[href]");
 			
 			String cardSetPage = null;
@@ -49,7 +59,7 @@ public class CollectCardSets {
 	         }
 	         System.out.println(cardSetPage);
 	         
-	         Document setDoc = Jsoup.connect(cardSetPage).timeout(20000).get();
+	         Document setDoc = Jsoup.connect(cardSetPage).timeout(60000).get();
 	         
 	         Elements anchors = setDoc.select("a[href]");
 	         
@@ -67,7 +77,7 @@ public class CollectCardSets {
 	         List<String> setPages = new ArrayList<String>();
 	         setPages.add(viewAllCardSetPage);
 	         
-	         Document allSetDoc = Jsoup.connect(viewAllCardSetPage).timeout(20000).get();
+	         Document allSetDoc = Jsoup.connect(viewAllCardSetPage).timeout(60000).get();
 	         Elements uls = allSetDoc.select("ul[class=pagination]");
 	         
 	                
@@ -105,7 +115,7 @@ public class CollectCardSets {
 	    	 Iterator<String> setPagesIterator = setPages.iterator();
 	         while (setPagesIterator.hasNext()){
 	        	 String currentPage = setPagesIterator.next();
-	        	 Document currentPageDoc = Jsoup.connect(currentPage).timeout(20000).get();
+	        	 Document currentPageDoc = Jsoup.connect(currentPage).timeout(60000).get();
 	        	 Elements currentPageCardLinks = currentPageDoc.select("a[href]");
 	        	 
 		         
@@ -147,9 +157,8 @@ public class CollectCardSets {
 			        			 
 //			        		    prevLastName = lastName.toString();
 //			        		    prevFirstName = firstName.toString();
-			        		 	System.out.println(CARD_YEAR+","+CARD_SERIES+","+cardNumber+","+lastName+","+firstName+","+baseImageName);
-			        		 
-			        		 	Document cardDoc = Jsoup.connect(currentCardPage.toString()).timeout(20000).get();
+			        		 				        		 
+			        		 	Document cardDoc = Jsoup.connect(currentCardPage.toString()).timeout(60000).get();
 			        		 	Elements cardImages = cardDoc.select("img[class=img-responsive");
 			        		 	for (Element cardImage : cardImages){
 			        		 		String cardImageURL = BASE_URL + cardImage.attr("src");
@@ -157,6 +166,10 @@ public class CollectCardSets {
 			        		 		String endImageName = cardImageName.substring(cardImageName.lastIndexOf(".")-2);
 			        		 		String destBaseImageName = CARD_YEAR + CARD_SERIES + cardNumber;
 			        		 		String cardImageDest = BASE_PATH + CARD_SERIES + "/" + CARD_YEAR + "/" + destBaseImageName + "-" + endImageName;
+			        		 		if(endImageName.startsWith("Fr")){
+			        		 			System.out.println(CARD_YEAR+","+CARD_SERIES+","+cardNumber+","+lastName+","+firstName+","+baseImageName+","+destBaseImageName);
+			        		 			dataPrint.println(CARD_YEAR+","+CARD_SERIES+","+cardNumber+","+lastName+","+firstName+","+baseImageName+","+destBaseImageName);
+			        		 		}
 			        		 		saveImage(cardImageURL,cardImageDest);
 			        		 	
 			        			 
@@ -170,7 +183,7 @@ public class CollectCardSets {
 	        	 
 	         }
 			
-
+	         dataPrint.close();
 	}catch(Exception e) {
 		e.printStackTrace();
 	}
