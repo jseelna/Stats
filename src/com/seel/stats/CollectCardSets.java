@@ -17,7 +17,7 @@ import java.util.*;
 public class CollectCardSets {
 	
 	static final String CARD_SERIES = "Topps";  
-	static final String CARD_YEAR = "2016";
+	static final String CARD_YEAR = "1952";
 	static final String BASE_PATH = "D:/images/bbcards/";
 	
 	static final String BASE_URL = "http://www.tradingcarddb.com";
