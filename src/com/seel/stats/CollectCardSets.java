@@ -19,7 +19,7 @@ import java.util.*;
 public class CollectCardSets {
 	
 	static final String CARD_SERIES = "Topps";  
-	static final String CARD_YEAR = "1957";
+	static final String CARD_YEAR = "1962";
 	static final String BASE_PATH = "D:/images/bbcards/";
 	
 	static final String BASE_URL = "http://www.tradingcarddb.com";
@@ -128,6 +128,11 @@ public class CollectCardSets {
 			        	 if (currentCardLink.contains("ViewCard")){
 			        		 currentCardPage = BASE_URL+currentCardLink;
 //			        		 System.out.println(currentCardPage);
+			        		 
+			        		 if (currentCardPage.lastIndexOf("?")<0){
+			        			 currentCardPage = currentCardPage + "?";
+			        		 }
+//			        		 System.out.println(currentCardPage);
 			        		 String baseImageName = currentCardPage.substring(currentCardPage.lastIndexOf(CARD_YEAR),currentCardPage.lastIndexOf("?"));
 //			        		 System.out.println(baseImageName);
 			        		 StringTokenizer bINsT = new StringTokenizer(baseImageName,"-");
@@ -140,6 +145,7 @@ public class CollectCardSets {
 			        	     }
 			        		 
 			        		 String cardNumber = tokens.get(2);
+//			        		 System.out.println(cardNumber);
 			        		 
 			        		 String firstName;
 			        		 String lastName;
@@ -147,11 +153,15 @@ public class CollectCardSets {
 			        		 if (tokens.size() > 5){
 			        			 firstName = "Special";
 			        			 lastName = "Special";
+			        		 }else if (tokens.size() < 5) {
+			        			 firstName = "Unknown";
+			        			 lastName = "Unknown";
 			        		 }else {
 			        			 firstName = tokens.get(3);
 				        		 lastName = tokens.get(4);
 			        		 }
-			        		 			        		 
+//			        		 System.out.println(firstName);
+//			        		 System.out.println(lastName);
 			        			        		 
 //			        		 if (!(lastName.equals(prevLastName) && firstName.equals(prevFirstName))){
 			        			 
@@ -163,7 +173,10 @@ public class CollectCardSets {
 			        		 	for (Element cardImage : cardImages){
 			        		 		String cardImageURL = BASE_URL + cardImage.attr("src");
 			        		 		String cardImageName = cardImageURL.substring(cardImageURL.lastIndexOf("/")+1);
+//			        		 		System.out.println(cardImageName);
+			        		 		
 			        		 		String endImageName = cardImageName.substring(cardImageName.lastIndexOf(".")-2);
+//			        		 		System.out.println(endImageName);
 			        		 		String destBaseImageName = CARD_YEAR + CARD_SERIES + cardNumber;
 			        		 		String cardImageDest = BASE_PATH + CARD_SERIES + "/" + CARD_YEAR + "/" + destBaseImageName + "-" + endImageName;
 			        		 		if(endImageName.startsWith("Fr")){
