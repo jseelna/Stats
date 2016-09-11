@@ -1,0 +1,34 @@
+SELECT * From dbo.MASTER WHERE nameLast = 'Combs'
+
+
+SELECT COUNT(*) FROM dbo.MASTER, dbo.BATTING
+WHERE dbo.MASTER.nameLast = 'Porter' and
+		dbo.MASTER.playerId = dbo.BATTING.playerId and
+		dbo.BATTING.yearId = '1953' 
+		
+
+SELECT dbo.MASTER.* FROM dbo.MASTER, dbo.BATTING
+WHERE dbo.MASTER.nameLast = 'Kennedy' and dbo.MASTER.nameFirst = 'Monte' and
+		dbo.MASTER.playerId = dbo.BATTING.playerId and
+		dbo.BATTING.yearId = '1952' 
+		
+SELECT dbo.MASTER.* FROM dbo.MASTER, dbo.BATTING
+WHERE dbo.MASTER.nameLast = '' and dbo.MASTER.nameFirst = 'Monte' and
+		dbo.MASTER.playerId = dbo.BATTING.playerId and
+		dbo.BATTING.yearId = '1951' 
+		
+
+SELECT dbo.MASTER.* FROM dbo.MASTER, dbo.BATTING
+WHERE dbo.MASTER.nameLast = 'Erautt' and
+		dbo.MASTER.playerId = dbo.BATTING.playerId and
+		dbo.BATTING.yearId = '1951'
+		
+SELECT * FROM dbo.MASTER WHERE nameLast = 'Casagrande'
+
+SELECT Count(*) FROM dbo.MASTER WHERE nameLast ='Porter' and (nameFirst like  or nameGiven like ?)
+		
+
+		
+
+		
+
